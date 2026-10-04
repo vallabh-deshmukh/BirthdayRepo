@@ -260,7 +260,6 @@ function renderParty(card) {
       <div class="actions">
         <button class="btn" id="blow-btn" type="button">Blow candles</button>
         <button class="btn secondary" id="replay" type="button" hidden>Light them again</button>
-        <button class="btn ghost" id="make-another" type="button">Make another card</button>
       </div>
     </section>
   `;

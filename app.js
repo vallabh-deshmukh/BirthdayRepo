@@ -158,19 +158,54 @@ function renderShare(card, payload) {
       </div>
       <div class="card">
         <p class="lede">Birthday card for <strong>${escapeHtml(card.name)}</strong>, turning ${card.age}.</p>
-        <div class="share-box" id="share-url">${escapeHtml(url)}</div>
+        <div class="share-box" id="share-url" tabindex="0" role="button" aria-label="Copy the birthday card link">${escapeHtml(url)}</div>
+        <p class="copy-status" id="copy-status" aria-live="polite">Ready to share</p>
         <button class="btn" id="copy-link" type="button">Copy link</button>
         <button class="btn secondary" id="open-card" type="button">Open the card</button>
         <button class="btn ghost" id="edit-card" type="button">Edit details</button>
       </div>
     </section>
   `;
-  app.querySelector("#copy-link").addEventListener("click", async () => {
+
+  const shareBox = app.querySelector("#share-url");
+  const copyStatus = app.querySelector("#copy-status");
+  const copyButton = app.querySelector("#copy-link");
+
+  const selectShareUrl = () => {
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(shareBox);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    shareBox.focus();
+  };
+
+  shareBox.addEventListener("click", selectShareUrl);
+  shareBox.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      selectShareUrl();
+    }
+  });
+
+  copyButton.addEventListener("click", async () => {
     try {
-      await navigator.clipboard.writeText(url);
-      app.querySelector("#copy-link").textContent = "Copied!";
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        selectShareUrl();
+        document.execCommand("copy");
+      }
+      copyStatus.textContent = "Link copied.";
+      copyButton.textContent = "Copied!";
+      setTimeout(() => {
+        copyButton.textContent = "Copy link";
+        copyStatus.textContent = "Ready to share";
+      }, 1600);
     } catch {
-      app.querySelector("#copy-link").textContent = "Copy from the box above";
+      selectShareUrl();
+      copyStatus.textContent = "Copy failed — select the link and copy it manually.";
+      copyButton.textContent = "Copy from the box above";
     }
   });
   app.querySelector("#open-card").addEventListener("click", () => {

@@ -281,11 +281,31 @@ label {
 
 .share-box {
   background: #f7f2e8;
+  border: 1.5px solid var(--line);
   border-radius: 12px;
   padding: 12px;
   word-break: break-all;
   font-size: 0.85rem;
   margin: 12px 0;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.share-box:focus {
+  outline: 2px solid var(--purple);
+  border-color: transparent;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18);
+}
+
+.share-box::selection {
+  background: rgba(139, 92, 246, 0.2);
+}
+
+.copy-status {
+  min-height: 1.2em;
+  margin: -4px 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
 }
 
 .party {

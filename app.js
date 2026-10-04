@@ -283,9 +283,6 @@ function renderParty(card) {
     app.querySelector("#mic-status").textContent = "Listening for a blow…";
     startMic();
   });
-  app.querySelector("#make-another").addEventListener("click", () => {
-    location.hash = "";
-  });
   startMic();
 }
 
